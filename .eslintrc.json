@@ -1,0 +1,26 @@
+{
+	"root": true,
+	"parser": "@typescript-eslint/parser", // TypeScript를 위한 파서
+	"parserOptions": {
+		"ecmaVersion": 2020, // 최신 JavaScript 문법
+		"sourceType": "module" // ES 모듈 사용
+	},
+	"extends": [
+		"eslint:recommended", // 기본 ESLint 권장 규칙
+		"plugin:@typescript-eslint/recommended", // TypeScript 권장 규칙
+		"plugin:import/errors", // import 관련 오류 검사
+		"plugin:import/warnings", // import 관련 경고 검사
+		"plugin:import/typescript", // TypeScript import 검사
+		"prettier", // Prettier와 호환되는 ESLint 규칙
+		"plugin:prettier/recommended" // Prettier와 ESLint 통합
+	],
+	"rules": {
+		"@typescript-eslint/no-unused-vars": [
+			"error",
+			{ "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" } // '_'로 시작하는 arg | var error
+		],
+		"@typescript-eslint/no-explicit-any": "warn", // any 사용시 warn
+		"@typescript-eslint/explicit-module-boundary-types": "off" // 함수 반환 타입을 명시하지 않음
+	},
+	"ignorePatterns": ["client/dist/**/*", "server/dist/**/*"]
+}
