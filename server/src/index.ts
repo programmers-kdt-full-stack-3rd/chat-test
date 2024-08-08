@@ -17,13 +17,33 @@ const io = new Server(server, {
  * socket 세팅
  */
 
+// 채팅방 Map
+const rooms: Map<string, string[]> = new Map();
+
 // 소켓 연결
 io.on("connection", socket => {
-	console.log("a user connected");
+	console.log("a user connected: ", socket.id);
 
-	// message 수신
-	socket.on("message", data => {
-		socket.broadcast.emit("other message", data);
+	// room 전체에게 broadcast
+	socket.on("message", ({ roomId, msg }) => {
+		socket.to(roomId).emit("message", { roomId, msg });
+	});
+
+	// 채팅방 입장
+	socket.on("join", roomId => {
+		socket.join(roomId);
+		console.log(`${socket.id} joined room: ${roomId}`);
+		io.to(roomId).emit("message", {
+			roomId,
+			msg: `${socket.id} has joined the room.`,
+		});
+	});
+
+	// 채팅방 나가기
+	socket.on("leave", roomId => {
+		socket.leave(roomId);
+		rooms.delete(roomId);
+		// io.emit("rooms", Array.from(rooms)); // Broadcast room list
 	});
 
 	// 연결 끊김
